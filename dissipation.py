@@ -83,7 +83,7 @@ def Roe_dissipation(u, limiter):
     D = jnp.zeros((2,2,num_cells))
     D = D.at[0,0,:].set(jnp.abs(vel_mean - vel_char)); D = D.at[1,1,:].set(jnp.abs(vel_mean + vel_char))
 
-    #compute coefficients of entropy variable jump in eigenvector basis
+    #compute inner product of entropy variable jump and eigenvector basis
     delta = mul(R.transpose(1,0,2), eta_jump)
 
     limiter_mean = 0.5 * (limiter(jnp.roll(delta, shift=1, axis=1), delta) + limiter(jnp.roll(delta, shift=-1, axis=1), delta))
@@ -100,6 +100,8 @@ def return_dissipation(which_dissipation):
 
         Options:
             - Roe dissipation
+            - Laplacian (not implemented)
+            - No dissipation
     """
     match which_dissipation:
         case "TECNO_ROE":
@@ -112,5 +114,10 @@ def return_dissipation(which_dissipation):
                 Simple Laplacian dissipation
             """
             raise NotImplementedError("Laplacian dissipation has not been implemented yet")
+        case "NONE":
+            """
+                No dissipation
+            """
+            dissipation = lambda u, lim: 0.0 * u
 
     return dissipation

@@ -25,13 +25,13 @@ g           = 3
 
 #Mesh [-length,length]
 length      = 1
-num_cells   = 3000
+num_cells   = 300
 dx          = 2 * length / num_cells
 x           = jnp.linspace(-length + 0.5 * dx, length - 0.5 * dx, num_cells, dtype = DTYPE)
 
 #Temporal
-time_final  = 1
-num_steps   = 20000
+time_final  = 1.0
+num_steps   = 2000
 dt          = time_final / num_steps
 
 #Numerics
@@ -39,4 +39,4 @@ TEST_CASE   = "DAM_BREAK"
 FLUX        = "FJORDHOLM"
 LIMITER     = "MINMOD"
 DISSIPATION = "TECNO_ROE"
-INTEGRATOR  = "RK4"
+INTEGRATOR  = "TADMOR"

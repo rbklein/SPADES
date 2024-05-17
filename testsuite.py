@@ -12,6 +12,9 @@ def return_case(test_case):
         case "DAM_BREAK":
             initial_h = lambda x: jnp.where(jnp.abs(x) < 0.2, 1.5, 1)     
             initial_hu = lambda x: x * 0.0 
+        case "DROP":
+            initial_h = lambda x: 0.1 * jnp.exp(-100 * x**2) + 1
+            initial_hu = lambda x: x * 0 
 
 
     return initial_h, initial_hu
