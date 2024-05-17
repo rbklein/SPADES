@@ -1,0 +1,27 @@
+"""
+    Contains plotting functions
+"""
+
+import matplotlib.pyplot as plt
+
+def plot_all(x, u):
+    """
+        Plots the water height and discharge
+    """
+    fig, ax = plt.subplots(1,2)
+    ax[0].plot(x, u[0])
+    ax[1].plot(x, u[1])
+    ax[0].set_xlabel(r'$x$')
+    ax[0].set_ylabel(r'$h$')
+    ax[1].set_xlabel(r'$x$')
+    ax[1].set_ylabel(r'$hu$')
+    ax[0].set_title('Water height')
+    ax[1].set_title('Discharge')
+    ax[0].grid()
+    ax[1].grid()
+
+def show():
+    """
+        Shows all generated figures on screen
+    """
+    plt.show()
