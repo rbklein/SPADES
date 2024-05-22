@@ -9,6 +9,9 @@ import plot
 
 u = jnp.copy(u_0)
 
+plot.plot_all(x, u)
+plot.show()
+
 time_index = 0
 while time_index < num_steps:
     u = step(u, FOM.dudt)

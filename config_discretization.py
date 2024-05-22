@@ -3,6 +3,14 @@
 
     Discretization details:
         - cell-centered finite volume method
+
+    Entropy violating Riemann:
+        - g = 9.81
+        - length = 25
+        - num_cells = 1000
+        - time_final = 1.0
+        - num_steps = 10000
+        - TEST_CASE = "RIEMANN"
 """
 
 import jax

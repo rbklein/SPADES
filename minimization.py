@@ -43,6 +43,9 @@ def newton_raphson(f, x0, tol=1e-6, maxiter=20):
 
 @partial(jax.jit, static_argnums = 0)
 def levenberg_marquardt(f, x0, tol=1e-6, maxiter=100, lambda_init=1e-3):
+    """
+        JIT-compileable implementation of the Levenberg-Marquardt root finding algorithm (thanks in part to chatGPT (: )
+    """
 
     # Define a JIT compiled function to compute the Jacobian of f
     jacobian_f = jax.jit(jax.jacfwd(f))
@@ -91,21 +94,23 @@ def verbose_newton_raphson(f, x0, tol=1e-6, maxiter=20):
     """
 
     jacobian_f = jax.jit(jax.jacfwd(f))
-    x = jnp.array(x0)
+    u = jnp.array(x0)
 
     for i in range(maxiter):
-        fx = f(x)
-        Jx = jacobian_f(x)
+        fx = f(u)
+        Jx = jacobian_f(u)
+
+        Jx = jnp.where(jnp.abs(Jx) > 5, 5, Jx)
         
         if jnp.linalg.norm(fx) < tol:
             print(f'Converged in {i+1} iterations.')
-            return x
+            return u
         
         delta_x = jnp.linalg.solve(Jx, -fx)
 
         print(jnp.max(delta_x))
 
-        x = x + delta_x
+        u = u + delta_x
 
     print('Warning: Maximum number of iterations reached without convergence.')
     return x
