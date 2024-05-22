@@ -13,6 +13,7 @@ import testsuite
 import flux
 import dissipation
 import integrator
+import boundary
 
 initial_h, initial_hu = testsuite.return_case(TEST_CASE)
 
@@ -20,6 +21,7 @@ f_cons  = flux.return_flux(FLUX)
 f_diss  = dissipation.return_dissipation(DISSIPATION)
 lim     = dissipation.return_limiter(LIMITER)
 step    = integrator.return_integrator(INTEGRATOR)
+padder  = boundary.return_padder(BOUNDARY)
 
 h_0     = initial_h(x)
 hu_0    = initial_hu(x)

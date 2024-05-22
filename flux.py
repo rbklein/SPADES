@@ -1,5 +1,7 @@
 """
     Contains functions to compute entropy conservative numerical fluxes
+
+    The numerical flux functions assume the solution u to be padded
 """
 
 from config_discretization import *
@@ -12,15 +14,18 @@ def a_mean(quantity):
     """
         Computes arithmetic mean of quantity 
 
-        The i-th component is the mean between cell i and i+1
+        The mean is taken between as many cells as possible without exceeding array dimensions
     """
-    return 0.5 * (quantity + jnp.roll(quantity, shift))
+
+    return 0.5 * (quantity[1:] + quantity[:-1])
 
 @jax.jit
 def Fjordholm_flux(u):
     """
         Computes flux of Fjordholm, Mishra and Tadmor from "Energy preserving and energy stable schemes
         for the shallow water equations" 
+
+        u is assumed padded
     """
     h_mean      = a_mean(u[0])
     vel         = u[1] / u[0]
@@ -45,6 +50,7 @@ def return_flux(which_flux):
             """
                 The flux by Fjordholm, Mishra and Tadmor
             """
+            assert(pad_width_flux == 1)
             flux = Fjordholm_flux
 
     return flux

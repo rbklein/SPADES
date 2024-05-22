@@ -20,10 +20,10 @@ def RK4(u, dudt):
     """
         The classical 4-th order Runge-Kutta time integrator
     """
-    k1 = dudt(u, u)
-    k2 = dudt(u + k1 * dt / 2, u)
-    k3 = dudt(u + k2 * dt / 2, u)
-    k4 = dudt(u + k3 * dt, u)
+    k1 = dudt(u)
+    k2 = dudt(u + k1 * dt / 2)
+    k3 = dudt(u + k2 * dt / 2)
+    k4 = dudt(u + k3 * dt)
     return u + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
 
 @partial(jax.jit, static_argnums = 1)
@@ -40,7 +40,7 @@ def Tadmor_midpoint(u, dudt):
     average_u       = lambda u_new: entropy.conservative_variables(discrete_gradient.Gonzalez(jnp.reshape(u_new, (2,-1)), u))
 
     #evaluates FOM residual at Gonzalez entropy average
-    residual_Crank_Nicolson = lambda u_new: jnp.reshape(jnp.reshape(u_new, (2,-1)) - u - dt * dudt(average_u(u_new), u), (2 * num_cells))
+    residual_Crank_Nicolson = lambda u_new: jnp.reshape(jnp.reshape(u_new, (2,-1)) - u - dt * dudt(average_u(u_new)), (2 * num_cells))
 
     u_new = minimization.newton_raphson(residual_Crank_Nicolson, u_guess, 1e-6, 20)
 

@@ -9,12 +9,12 @@ from config_discretization import *
 from setup import *
 
 @jax.jit
-def dudt(u, u_ref = 0):
+def dudt(u):
     """
         Returns the ODEs corresponding to the semi-discrete shallow water equations using the specified 
         entropy conservative flux, entropy dissipation operator and limiter
     """
-    F = f_cons(u)
-    D = f_diss(u, lim, u_ref)
-    return - ((F - jnp.roll(F,shift=1,axis=1)) + (D - jnp.roll(D,shift=1,axis=1)) ) / dx
+    F = f_cons(padder(u,pad_width_flux))
+    D = f_diss(padder(u,pad_width_diss), lim)
+    return - ((F[:,1:] - F[:,:-1]) + (D[:,1:] - D[:,:-1]) ) / dx
 

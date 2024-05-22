@@ -28,7 +28,9 @@ def newton_raphson(f, x0, tol=1e-6, maxiter=20):
         x, _, iter_count = val
         fx = f(x)
         Jx = jacobian_f(x)
+
         delta_x = jnp.linalg.solve(Jx, -fx)
+
         x = x + delta_x
         return x, f(x), iter_count + 1
 

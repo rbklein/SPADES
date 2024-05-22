@@ -10,7 +10,15 @@
         - num_cells = 1000
         - time_final = 1.0
         - num_steps = 10000
-        - TEST_CASE = "RIEMANN"
+        - TEST_CASE = "ENTROPY_RIEMANN"
+
+    Positivity violating Riemann:
+        - g = 9.81
+        - length = 10
+        - num_cells = 3000
+        - time_final = 0.125
+        - num_steps = 10000
+        - TEST_CASE = "POSITIVITY_RIEMANN"
 """
 
 import jax
@@ -29,22 +37,31 @@ match set_DTYPE:
 
 
 #Gravity coefficient
-g           = 3
+g           = 9.81
 
 #Mesh [-length,length]
-length      = 1
-num_cells   = 300
+length      = 10
+num_cells   = 3000
 dx          = 2 * length / num_cells
 x           = jnp.linspace(-length + 0.5 * dx, length - 0.5 * dx, num_cells, dtype = DTYPE)
 
 #Temporal
-time_final  = 1.0
-num_steps   = 2000
+time_final  = 0.125
+num_steps   = 20000
 dt          = time_final / num_steps
 
+#Boundary
+#padding width necessary for implementing boundary conditions
+pad_width_flux          = 1
+pad_width_diss          = 2
+
+num_ghost_cells_flux    = 2 * pad_width_flux + num_cells
+num_ghost_cells_diss    = 2 * pad_width_diss + num_cells
+
 #Numerics
-TEST_CASE   = "DAM_BREAK"
+TEST_CASE   = "POSITIVITY_RIEMANN"
 FLUX        = "FJORDHOLM"
 LIMITER     = "MINMOD"
 DISSIPATION = "TECNO_ROE"
-INTEGRATOR  = "TADMOR"
+INTEGRATOR  = "RK4"
+BOUNDARY    = "TRANSMISSIVE"

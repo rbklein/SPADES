@@ -18,6 +18,9 @@ def return_case(test_case):
         case "ENTROPY_RIEMANN":
             initial_h = lambda x: jnp.where(jnp.abs(x) < 12.5, 1.5, 0.02)     
             initial_hu = lambda x: x * 0.0 
+        case "POSITIVITY_RIEMANN":
+            initial_h = lambda x: 5 + 0 * x
+            initial_hu = lambda x: jnp.where(x < 0.0, -35.0, 35.0) * initial_h(x)
 
 
 
