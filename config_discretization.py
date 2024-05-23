@@ -2,7 +2,9 @@
     Configure discretization options and parameters
 
     Discretization details:
-        - cell-centered finite volume method
+        - Cell-centered finite volume method
+        - Boundary conditions are implemented via ghost cells
+        - Non-flat bottom topography can be included
 
     Entropy violating Riemann:
         - g = 9.81
@@ -11,6 +13,7 @@
         - time_final = 1.0
         - num_steps = 10000
         - TEST_CASE = "ENTROPY_RIEMANN"
+        - TOPOGRAPHY = "FLAT"
 
     Positivity violating Riemann:
         - g = 9.81
@@ -19,6 +22,11 @@
         - time_final = 0.125
         - num_steps = 10000
         - TEST_CASE = "POSITIVITY_RIEMANN"
+        - TOPOGRAPHY = "FLAT"
+
+    Thacker:
+        - TOPOGRAPHY = "THACKER"
+
 """
 
 import jax
@@ -40,28 +48,38 @@ match set_DTYPE:
 g           = 9.81
 
 #Mesh [-length,length]
-length      = 10
+length      = 750
 num_cells   = 3000
 dx          = 2 * length / num_cells
 x           = jnp.linspace(-length + 0.5 * dx, length - 0.5 * dx, num_cells, dtype = DTYPE)
 
 #Temporal
-time_final  = 0.125
-num_steps   = 20000
+time_final  = 50
+num_steps   = 200000
 dt          = time_final / num_steps
 
 #Boundary
 #padding width necessary for implementing boundary conditions
 pad_width_flux          = 1
 pad_width_diss          = 2
+pad_width_source        = 1
 
 num_ghost_cells_flux    = 2 * pad_width_flux + num_cells
 num_ghost_cells_diss    = 2 * pad_width_diss + num_cells
 
+#Initial conditions
+HEIGHT_IS_FREE_SURFACE = True
+initial_condition_params = (20.0, 15.0, 0.0, 0.0)
+
+#Bottom topography
+topography_params = () # (0.5, 1) # (8.0, 1500 / 4)
+
 #Numerics
-TEST_CASE   = "POSITIVITY_RIEMANN"
+TEST_CASE   = "RIEMANN"
 FLUX        = "FJORDHOLM"
 LIMITER     = "MINMOD"
 DISSIPATION = "TECNO_ROE"
 INTEGRATOR  = "RK4"
 BOUNDARY    = "TRANSMISSIVE"
+SOURCE      = "FJORDHOLM"
+TOPOGRAPHY  = "ALESSIA"

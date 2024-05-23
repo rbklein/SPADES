@@ -16,5 +16,6 @@ def dudt(u):
     """
     F = f_cons(padder(u,pad_width_flux))
     D = f_diss(padder(u,pad_width_diss), lim)
-    return - ((F[:,1:] - F[:,:-1]) + (D[:,1:] - D[:,:-1]) ) / dx
+    S = f_source(padder(u,pad_width_source), b)
+    return - ((F[:,1:] - F[:,:-1]) + (D[:,1:] - D[:,:-1]) ) / dx + S
 

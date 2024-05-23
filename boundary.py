@@ -6,10 +6,6 @@ from functools import partial
 
 from config_discretization import *
 
-@partial(jax.jit, static_argnums = (1,2))
-def select_section(u_pad, start_ind, end_ind):
-    return u_pad[:, start_ind:end_ind]
-
 pad_system = jax.vmap(jnp.pad, (0, None, None), 0)
 pad_system.__doc__ = "pads axis 1 of 2D array by specified width and using specified mode"
 
@@ -55,6 +51,6 @@ def return_padder(which_boundary):
 if __name__ == "__main__":
     x = jnp.linspace(1,num_cells,num_cells)
     xx = jnp.vstack((x,x))
-    x_pad = transmissive_pad(xx)
+    x_pad = transmissive_pad(x[None,:],2)
 
     print(x_pad)

@@ -16,7 +16,7 @@ def jump_vec(quantity):
     """
         Compute jump in vector-valued quantity on grid 
 
-        REDO: The i-th component is the jump between cells i+1 and i
+        Computes as many jumps as possible given the quantity
 
         indices:
             quantity: 0 row index, 1 grid index
