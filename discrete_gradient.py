@@ -9,7 +9,7 @@ import entropy
 @jax.jit
 def zero_by_zero(num, den):
     """
-        Robust division operator for 0/0 scenarios (thanks to Alessia)
+        Robust division operator for 0/0 = 0 scenarios (thanks to Alessia)
     """
     return den * (jnp.sqrt(2) * num) / (jnp.sqrt(den**4 + jnp.maximum(den, 1e-12)**4))
 

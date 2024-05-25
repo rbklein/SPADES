@@ -45,17 +45,17 @@ match set_DTYPE:
 
 
 #Gravity coefficient
-g           = 9.81
+g           = 9.81 # 3 # 
 
 #Mesh [-length,length]
-length      = 750
+length      = 750 # 1 #
 num_cells   = 3000
 dx          = 2 * length / num_cells
 x           = jnp.linspace(-length + 0.5 * dx, length - 0.5 * dx, num_cells, dtype = DTYPE)
 
 #Temporal
-time_final  = 50
-num_steps   = 200000
+time_final  = 50 # 0.25 #
+num_steps   = 200000 # 2000 #
 dt          = time_final / num_steps
 
 #Boundary
@@ -69,7 +69,7 @@ num_ghost_cells_diss    = 2 * pad_width_diss + num_cells
 
 #Initial conditions
 HEIGHT_IS_FREE_SURFACE = True
-initial_condition_params = (20.0, 15.0, 0.0, 0.0)
+initial_condition_params = (20.0, 15.0, 0.0, 0.0) # (2.0, 1.0, 0.0, 0.0) # 
 
 #Bottom topography
 topography_params = () # (0.5, 1) # (8.0, 1500 / 4)

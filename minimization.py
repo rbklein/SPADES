@@ -95,15 +95,25 @@ def verbose_newton_raphson(f, x0, tol=1e-6, maxiter=20):
         A simple Newton-Raphson implementation that gives iteration information (thank you chatGPT)
     """
 
+    import matplotlib.pyplot as plt
+
     jacobian_f = jax.jit(jax.jacfwd(f))
     u = jnp.array(x0)
 
     for i in range(maxiter):
         fx = f(u)
         Jx = jacobian_f(u)
-
-        Jx = jnp.where(jnp.abs(Jx) > 5, 5, Jx)
         
+        #plt.figure()
+        #plt.plot(u)
+
+        #Jx_p = jnp.where(jnp.abs(Jx) > 5, 5, Jx)
+
+        #plt.figure()
+        #plt.imshow(Jx_p)
+
+        #plt.show()
+
         if jnp.linalg.norm(fx) < tol:
             print(f'Converged in {i+1} iterations.')
             return u

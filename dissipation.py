@@ -10,6 +10,7 @@ from config_discretization import *
 import entropy
 import flux
 import boundary
+import discrete_gradient
 
 @jax.jit
 def jump_vec(quantity):
@@ -44,8 +45,9 @@ def minmod(delta1, delta2):
         Suitable for vector-valued inputes
     """
     #if delta2 is more than zero return delta2 else return a very small value
-    delta3 = jnp.where(jnp.abs(delta2) > 0, delta2, 1e-14)
-    phi = jnp.where(delta1 / delta3 < 0, 0, delta1 / delta3)
+    #delta3 = jnp.where(jnp.abs(delta2) > 0, delta2, 1e-14)
+    ratio_delta = discrete_gradient.zero_by_zero(delta1, delta2)
+    phi = jnp.where(ratio_delta < 0, 0, ratio_delta)
     return jnp.where(phi < 1, phi, 1)
 
 def return_limiter(which_limiter):
