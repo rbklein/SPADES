@@ -11,7 +11,7 @@ def zero_by_zero(num, den):
     """
         Robust division operator for 0/0 = 0 scenarios (thanks to Alessia)
     """
-    return den * (jnp.sqrt(2) * num) / (jnp.sqrt(den**4 + jnp.maximum(den, 1e-12)**4))
+    return den * (jnp.sqrt(2) * num) / (jnp.sqrt(den**4 + jnp.maximum(den, 1e-14)**4))
 
 @jax.jit
 def Gonzalez(u1,u2):

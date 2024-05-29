@@ -44,11 +44,14 @@ def minmod(delta1, delta2):
 
         Suitable for vector-valued inputes
     """
-    #if delta2 is more than zero return delta2 else return a very small value
-    #delta3 = jnp.where(jnp.abs(delta2) > 0, delta2, 1e-14)
-    ratio_delta = discrete_gradient.zero_by_zero(delta1, delta2)
+    delta3 = jnp.where(jnp.abs(delta2) > 0, delta2, 1e-14)
+    ratio_delta = delta1 / delta3
     phi = jnp.where(ratio_delta < 0, 0, ratio_delta)
     return jnp.where(phi < 1, phi, 1)
+
+    #theta = discrete_gradient.zero_by_zero(delta1, delta2)
+    #phi = jnp.where(theta < 0., 0., jnp.where(theta > 1, 1, theta))
+    #return phi
 
 def return_limiter(which_limiter):
     """
@@ -74,6 +77,8 @@ def first_order(u, limiter):
         To be implemented
     """
     pass
+
+import matplotlib.pyplot as plt
 
 @partial(jax.jit, static_argnums = 1)
 def Roe_dissipation(u, limiter):
@@ -106,7 +111,11 @@ def Roe_dissipation(u, limiter):
     #compute inner product of entropy variable jump and eigenvector basis
     delta = mul(R.transpose(1,0,2), eta_jump)
 
-    limiter_mean = 0.5 * (limiter(delta[:,:num_cells+1], delta[:,1:num_cells+2]) + limiter(delta[:,2:num_cells+3], delta[:,1:num_cells+2]))
+    delta_L = delta[:,:num_cells+1]
+    delta_C = delta[:,1:num_cells+2]
+    delta_R = delta[:,2:]
+
+    limiter_mean = 0.5 * (limiter(delta_L, delta_C) + limiter(delta_R, delta_C))
 
     #compute scaling coefficient eigenvalues
     S = jnp.zeros((2,2,num_cells + 1))

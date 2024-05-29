@@ -45,17 +45,17 @@ match set_DTYPE:
 
 
 #Gravity coefficient
-g           = 9.81 # 3 # 
+g           = 9.81
 
 #Mesh [-length,length]
-length      = 750 # 1 #
+length      = 10
 num_cells   = 3000
 dx          = 2 * length / num_cells
 x           = jnp.linspace(-length + 0.5 * dx, length - 0.5 * dx, num_cells, dtype = DTYPE)
 
 #Temporal
-time_final  = 50 # 0.25 #
-num_steps   = 200000 # 2000 #
+time_final  = 0.125
+num_steps   = 20000
 dt          = time_final / num_steps
 
 #Boundary
@@ -75,11 +75,14 @@ initial_condition_params = (20.0, 15.0, 0.0, 0.0) # (2.0, 1.0, 0.0, 0.0) #
 topography_params = () # (0.5, 1) # (8.0, 1500 / 4)
 
 #Numerics
-TEST_CASE   = "RIEMANN"
+TEST_CASE   = "POSITIVITY_RIEMANN"
 FLUX        = "FJORDHOLM"
 LIMITER     = "MINMOD"
 DISSIPATION = "TECNO_ROE"
 INTEGRATOR  = "RK4"
 BOUNDARY    = "TRANSMISSIVE"
 SOURCE      = "FJORDHOLM"
-TOPOGRAPHY  = "ALESSIA"
+TOPOGRAPHY  = "FLAT"
+
+#data
+sample_rate = 10

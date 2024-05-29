@@ -97,7 +97,7 @@ def verbose_newton_raphson(f, x0, tol=1e-6, maxiter=20):
 
     import matplotlib.pyplot as plt
 
-    jacobian_f = jax.jit(jax.jacfwd(f))
+    jacobian_f = jax.jacfwd(f)
     u = jnp.array(x0)
 
     for i in range(maxiter):
@@ -125,4 +125,4 @@ def verbose_newton_raphson(f, x0, tol=1e-6, maxiter=20):
         u = u + delta_x
 
     print('Warning: Maximum number of iterations reached without convergence.')
-    return x
+    exit()

@@ -39,12 +39,10 @@ def Tadmor_midpoint(u, dudt):
     #evaluates entropy average between vectorized new state and the old state u
     average_u       = lambda u_new: entropy.conservative_variables(discrete_gradient.Gonzalez(jnp.reshape(u_new, (2,-1)), u))
 
-    print(average_u(u_guess).shape)
-
     #evaluates FOM residual at Gonzalez entropy average
     residual_Crank_Nicolson = lambda u_new: jnp.reshape(jnp.reshape(u_new, (2,-1)) - u - dt * dudt(average_u(u_new)), (2 * num_cells))
 
-    u_new = minimization.newton_raphson(residual_Crank_Nicolson, u_guess, 1e-6, 20)
+    u_new = minimization.newton_raphson(residual_Crank_Nicolson, u_guess, 1e-6)
 
     #reshape new state back to matrix
     return jnp.reshape(u_new, (2,-1))
