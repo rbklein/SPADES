@@ -6,27 +6,6 @@
         - Boundary conditions are implemented via ghost cells
         - Non-flat bottom topography can be included
 
-    Entropy violating Riemann:
-        - g = 9.81
-        - length = 25
-        - num_cells = 1000
-        - time_final = 1.0
-        - num_steps = 10000
-        - TEST_CASE = "ENTROPY_RIEMANN"
-        - TOPOGRAPHY = "FLAT"
-
-    Positivity violating Riemann:
-        - g = 9.81
-        - length = 10
-        - num_cells = 3000
-        - time_final = 0.125
-        - num_steps = 10000
-        - TEST_CASE = "POSITIVITY_RIEMANN"
-        - TOPOGRAPHY = "FLAT"
-
-    Thacker:
-        - TOPOGRAPHY = "THACKER"
-
 """
 
 import jax

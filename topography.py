@@ -6,14 +6,8 @@
 
 from config_discretization import *
 
-import flux
+from computational import arith_mean, jump
 
-@jax.jit
-def jump(quantity):
-    """
-        compute jump in scalar-valued quantity on grid
-    """
-    return quantity[1:] - quantity[:-1]
 
 def flat_topography(x, params):
     """
@@ -96,8 +90,8 @@ def Fjordholm_source(u, b):
         return jnp.zeros((2,num_cells), dtype=DTYPE)
     
     b_jump          = jump(b)
-    h_mean          = flux.a_mean(u[0])
-    h_b_jump_mean   = flux.a_mean(h_mean * b_jump)
+    h_mean          = arith_mean(u[0])
+    h_b_jump_mean   = arith_mean(h_mean * b_jump)
 
     S1 = jnp.zeros(num_cells, dtype=DTYPE)
     S2 = - g / dx * h_b_jump_mean

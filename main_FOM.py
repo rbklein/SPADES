@@ -1,5 +1,5 @@
 """
-    Main file containing a JAX-based solution algorithm of the shallow water equations on a periodic domain
+    Main file containing a JAX-based high-fidelity solution algorithm of the shallow water equations
 """
 
 from setup import *
@@ -27,5 +27,7 @@ while time_index < num_steps:
 
 plot.plot_all(x, u)
 plot.show()
+
+print(snapshots.shape)
 
 jnp.save("snapshot_data", snapshots)

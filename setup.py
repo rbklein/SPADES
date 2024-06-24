@@ -12,7 +12,7 @@ from config_discretization import *
 import testsuite
 import flux
 import dissipation
-import integrator
+import integration
 import boundary
 import topography
 
@@ -22,7 +22,7 @@ f_cons      = flux.return_flux(FLUX)
 f_diss      = dissipation.return_dissipation(DISSIPATION)
 f_source    = topography.return_source(SOURCE)
 lim         = dissipation.return_limiter(LIMITER)
-step        = integrator.return_integrator(INTEGRATOR)
+step        = integration.return_integrator(INTEGRATOR)
 padder      = boundary.return_padder(BOUNDARY)
 topo        = topography.return_topography(TOPOGRAPHY)
 

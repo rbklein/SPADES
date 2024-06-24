@@ -7,35 +7,9 @@ from functools import partial
 
 from config_discretization import *
 
+from computational import jump_vec, mul, arith_mean
+
 import entropy
-import flux
-import boundary
-import discrete_gradient
-
-@jax.jit
-def jump_vec(quantity):
-    """
-        Compute jump in vector-valued quantity on grid 
-
-        Computes as many jumps as possible given the quantity
-
-        indices:
-            quantity: 0 row index, 1 grid index
-    """
-    return quantity[:,1:] - quantity[:,:-1]
-
-@jax.jit
-def mul(A,v):
-    """
-        Computes matrix vector product at each node of the grid
-
-        numpy matmul docs: 'If either argument is N-Dimensional, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.'
-
-        indices:
-            A: 0 row index, 1 column index, 2 grid index
-            v: 0 vector component, 1 grid index + (a dummy index to enable use of jnp.matmul)
-    """
-    return jnp.matmul(A.transpose((2,0,1)), v[:,:,None].transpose((1,0,2)))[:,:,0].transpose()
 
 @jax.jit
 def minmod(delta1, delta2):
@@ -92,8 +66,8 @@ def Roe_dissipation(u, limiter):
     #number of cell interfaces that are not on the boundary of the grid (including ghost cells)
     num_inner_cell_interfaces = num_ghost_cells_diss - 1
 
-    h_mean      = flux.a_mean(u[0])
-    hu_mean     = flux.a_mean(u[1])
+    h_mean      = arith_mean(u[0])
+    hu_mean     = arith_mean(u[1])
     vel_mean    = hu_mean / h_mean
     vel_char    = jnp.sqrt(g * h_mean)
 

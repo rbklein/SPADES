@@ -6,18 +6,10 @@
 
 from config_discretization import *
 
+from computational import arith_mean
+
 #shift value for jnp.roll
 shift = -1
-
-@jax.jit
-def a_mean(quantity):
-    """
-        Computes arithmetic mean of quantity 
-
-        The mean is taken between as many cells as possible without exceeding array dimensions
-    """
-
-    return 0.5 * (quantity[1:] + quantity[:-1])
 
 @jax.jit
 def Fjordholm_flux(u):
@@ -27,11 +19,11 @@ def Fjordholm_flux(u):
 
         u is assumed padded
     """
-    h_mean      = a_mean(u[0])
+    h_mean      = arith_mean(u[0])
     vel         = u[1] / u[0]
-    vel_mean    = a_mean(vel)
+    vel_mean    = arith_mean(vel)
 
-    h_squared_mean = a_mean(u[0]**2)
+    h_squared_mean = arith_mean(u[0]**2)
 
     F1 = h_mean * vel_mean
     F2 = h_mean * vel_mean**2 + g/2 * h_squared_mean

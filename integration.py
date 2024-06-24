@@ -68,3 +68,31 @@ def return_integrator(which_integrator):
             integrator = Tadmor_midpoint
 
     return integrator
+
+@partial(jax.jit, static_argnums = 2)
+def ROM_RK4(a, Phi, dadt):
+    """
+        The classical 4-th order Runge-Kutta time integrator
+    """
+    k1 = dadt(a, Phi)
+    k2 = dadt(a + k1 * dt / 2, Phi)
+    k3 = dadt(a + k2 * dt / 2, Phi)
+    k4 = dadt(a + k3 * dt, Phi)
+    return a + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+
+def return_ROM_integrator(which_integrator):
+    """
+        Returns the specific numerical time integration function that will be used for computations of the reduced order model
+
+        Options:
+            - RK4
+    """
+    match which_integrator:
+        case "RK4":
+            """
+                The classical 4-th order Runge-Kutta time integrator
+            """
+            integrator = ROM_RK4
+
+    return integrator
+
